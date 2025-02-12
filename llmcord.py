@@ -192,8 +192,14 @@ async def on_message(new_msg):
 
     logging.info(f"Message received (user ID: {new_msg.author.id}, attachments: {len(new_msg.attachments)}, conversation length: {len(messages)}):\n{new_msg.content}")
 
+    add_date_to_prompt = cfg.get("prompt_settings", {}).get("add_date", True)
+    
     if system_prompt := cfg["system_prompt"]:
-        system_prompt_extras = [f"Today's date: {dt.now().strftime('%B %d %Y')}."]
+        system_prompt_extras = []
+
+        if add_date_to_prompt:
+            system_prompt_extras.append(f"Today's date: {dt.now().strftime('%B %d %Y')}.")
+
         if accept_usernames:
             system_prompt_extras.append("User's names are their Discord IDs and should be typed as '<@ID>'.")
 
