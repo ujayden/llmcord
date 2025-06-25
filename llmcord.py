@@ -232,7 +232,14 @@ async def on_message(new_msg: discord.Message) -> None:
 
     logging.info(f"Message received (user ID: {new_msg.author.id}, attachments: {len(new_msg.attachments)}, conversation length: {len(messages)}):\n{new_msg.content}")
 
-    if system_prompt := config["system_prompt"]:
+    try:
+        with open("SystemPrompt.md", encoding="utf-8") as file:
+            system_prompt = file.read()
+    except Exception:
+        logging.warning("Could not read SystemPrompt.md, falling back to config.")
+        system_prompt = config.get("system_prompt")
+
+    if system_prompt:
         now = datetime.now().astimezone()
 
         system_prompt = system_prompt.replace("{date}", now.strftime("%B %d %Y")).replace("{time}", now.strftime("%H:%M:%S %Z%z")).strip()
