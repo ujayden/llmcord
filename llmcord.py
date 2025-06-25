@@ -232,6 +232,10 @@ async def on_message(new_msg: discord.Message) -> None:
 
     logging.info(f"Message received (user ID: {new_msg.author.id}, attachments: {len(new_msg.attachments)}, conversation length: {len(messages)}):\n{new_msg.content}")
 
+    if not messages:
+        await new_msg.reply("You mentioned me, but your message was empty, so I cannot make any respond.", silent=True)
+        return
+
     try:
         with open("SystemPrompt.md", encoding="utf-8") as file:
             system_prompt = file.read()
