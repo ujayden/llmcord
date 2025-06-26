@@ -68,7 +68,9 @@ class MsgNode:
 async def model_command(interaction: discord.Interaction, model: str) -> None:
     global curr_model
 
-    if model == curr_model:
+    if model not in config["models"]:
+        output = f"❌ Model `{model}` not found. Please choose from the available models."
+    elif model == curr_model:
         output = f"Current model: `{curr_model}`"
     else:
         if user_is_admin := interaction.user.id in config["permissions"]["users"]["admin_ids"]:
@@ -233,7 +235,8 @@ async def on_message(new_msg: discord.Message) -> None:
     logging.info(f"Message received (user ID: {new_msg.author.id}, attachments: {len(new_msg.attachments)}, conversation length: {len(messages)}):\n{new_msg.content}")
 
     if not messages:
-        await new_msg.reply("You mentioned me, but your message was empty, so I cannot make any respond.", silent=True)
+        # await new_msg.reply("You mentioned me, but your message was empty, so I cannot make any respond.", silent=True)
+        # Directly return to stop processing if no messages were collected
         return
 
     try:
