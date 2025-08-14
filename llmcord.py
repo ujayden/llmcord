@@ -249,10 +249,10 @@ async def on_message(new_msg: discord.Message) -> None:
         return
 
     try:
-        with open("SystemPrompt.md", encoding="utf-8") as file:
+        with open("system_prompt.txt", encoding="utf-8") as file:
             system_prompt = file.read()
     except Exception:
-        logging.warning("Could not read SystemPrompt.md, falling back to config.")
+        logging.warning("Could not read system_prompt.txt, falling back to config.")
         system_prompt = config.get("system_prompt")
 
     if system_prompt:
